@@ -32,13 +32,12 @@ const executeShellCommand = (command) => {
 const isCorrectGitServer = (headers, data, response) => {
   switch (config.gitServerType) {
     case "GitHub":
-      var signer = crypto.createHmac("sha1", config.webhookSecret);
-      var stringifyBody = JSON.stringify(data);
-      console.log(stringifyBody);
-      var result = signer.update(stringifyBody).digest("hex");
-      const signature = headers["X-Hub-Signature"];
+      const headerSignature = headers["X-Hub-Signature"];
 
-      if (signature !== expectedSignature) {
+      var signer = crypto.createHmac("sha1", config.webhookSecret);
+      var expectedSignature = signer.update(JSON.stringify(data)).digest("hex");
+
+      if (headerSignature !== expectedSignature) {
         return false;
       }
 
