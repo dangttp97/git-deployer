@@ -33,7 +33,7 @@ const isCorrectGitServer = (request, response) => {
   switch (config.gitServerType) {
     case "GitHub":
       var signer = crypto.createHmac("sha1", config.webhookSecret);
-      var result = signer.update(JSON.stringify(request.body)).digest("hex");
+      var result = signer.update(JSON.stringify(request.data)).digest("hex");
       const signature = request.headers["X-Hub-Signature"];
 
       if (signature !== expectedSignature) {
