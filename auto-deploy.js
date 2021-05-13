@@ -29,14 +29,14 @@ const executeShellCommand = (command) => {
   });
 };
 
-const isCorrectGitServer = (data, response) => {
+const isCorrectGitServer = (headers, data, response) => {
   switch (config.gitServerType) {
     case "GitHub":
       var signer = crypto.createHmac("sha1", config.webhookSecret);
       var stringifyBody = JSON.stringify(data);
       console.log(stringifyBody);
       var result = signer.update(stringifyBody).digest("hex");
-      const signature = request.headers["X-Hub-Signature"];
+      const signature = headers["X-Hub-Signature"];
 
       if (signature !== expectedSignature) {
         return false;
@@ -74,7 +74,7 @@ const server = http.createServer(function (request, response) {
   if (request.method == "POST") {
     console.log(`Received POST method from: ${config.gitServerType}`);
     request.on("data", function (data) {
-      if (isCorrectGitServer(data, response)) {
+      if (isCorrectGitServer(request.headers, data, response)) {
         console.log("Git server verified, executing shell command...");
         executeShellCommand(config.shellCommand);
       } else {
