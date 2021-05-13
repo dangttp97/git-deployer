@@ -1,0 +1,14 @@
+{
+  "name": "git-auto-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auto-deploy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tran Thanh Phuong Dang",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1"
+  }
+}
