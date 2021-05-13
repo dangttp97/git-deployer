@@ -3,7 +3,7 @@
   "gitServerType": "GitHub",
   "gitRepoUrl": "git@github.com:pd-chiasenhac/api-server.git",
   "gitPrivateKeyFilePath": "~/.ssh",
-  "gitClonePath": "~/Documents/src/api-server",
+  "gitClonePath": "/home/dangttp1612/src/api-server",
   "shellCommand": "./deploy.sh",
   "webhookSecret": "28e7818d27afe907e1e881873e539622cd9e9941"
 }

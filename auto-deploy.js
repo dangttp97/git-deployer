@@ -29,11 +29,11 @@ const executeShellCommand = (command) => {
   });
 };
 
-const isCorrectGitServer = (request, response) => {
+const isCorrectGitServer = (data, response) => {
   switch (config.gitServerType) {
     case "GitHub":
       var signer = crypto.createHmac("sha1", config.webhookSecret);
-      var stringifyBody = JSON.stringify(request.body);
+      var stringifyBody = JSON.stringify(data);
       console.log(stringifyBody);
       var result = signer.update(stringifyBody).digest("hex");
       const signature = request.headers["X-Hub-Signature"];
@@ -73,13 +73,15 @@ const server = http.createServer(function (request, response) {
   //Handle webhook call
   if (request.method == "POST") {
     console.log(`Received POST method from: ${config.gitServerType}`);
-    if (isCorrectGitServer(request, response)) {
-      console.log("Git server verified, executing shell command...");
-      executeShellCommand(config.shellCommand);
-    } else {
-      response.statusCode = 400;
-      response.statusMessage = "Cannot verify git server";
-    }
+    request.on("data", function (data) {
+      if (isCorrectGitServer(data, response)) {
+        console.log("Git server verified, executing shell command...");
+        executeShellCommand(config.shellCommand);
+      } else {
+        response.statusCode = 400;
+        response.statusMessage = "Cannot verify git server";
+      }
+    });
   } else {
     response.statusCode = 501;
     response.statusMessage = "Method not supported";
